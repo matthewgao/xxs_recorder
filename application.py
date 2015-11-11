@@ -7,11 +7,8 @@ __author__ = 'Matthew Gao'
 
 # from db_model import *
 from flask import Flask, render_template, request
-from db import init_db
+from db import db, init_db
 from flask_bootstrap import Bootstrap
-
-
-# from db_model import init_db
 
 app = Flask(__name__)
 app.debug = True

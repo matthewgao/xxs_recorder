@@ -4,9 +4,10 @@
 
 # import application
 from forms import RecordForm
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for, redirect
 from db import db
 from db_model import GrowRecord
+from datetime import datetime
 
 def index():
     if request.method == 'POST':
@@ -20,7 +21,8 @@ def submit():
     rc = GrowRecord(request.form['event'], request.form['date'], request.form['extra_text'])
     db.session.add(rc)
     db.session.commit()
-    return render_template('submit.html', form=request.form), 200
+    # return render_template('submit.html', form=request.form), 200
+    return redirect(url_for('show'))
 
 def show():
     rc = GrowRecord.query.all()

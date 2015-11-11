@@ -4,15 +4,22 @@
 {% block title %}小小深成长记录{% endblock %}
 
 {% block navbar %}
-<div class="navbar navbar-fixed-top">
-  <!-- ... -->
+<div class="navbar navbar-inverse" role="navigation">
+   <div>
+      <ul class="nav navbar-nav">
+        <li><a class="navbar-brand" href="/">小小深记录</a></li>
+         <li class="active"><a href="/">Home</a></li>
+         <li><a href="/show">Show All</a></li>
+      </ul>
+   </div>
 </div>
 {% endblock %}
 
 {% block content %}
-  <h1>小小深成长记录</h1>
-  <form method="POST" action="/submit">
-  	{{ wtf.quick_form(form) }}
-  </form>
+  <div class="input-group">
+      <form method="POST" action="/submit">
+      	{{ wtf.quick_form(form) }}
+      </form>
+  </div>
   
 {% endblock %}
