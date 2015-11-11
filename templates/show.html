@@ -1,0 +1,25 @@
+
+{% extends "bootstrap/base.html" %}
+{% block title %}小小深成长记录{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
+</div>
+{% endblock %}
+
+{% block content %}
+  <h1>小小深成长记录</h1>
+  <div>
+    <table style="width:100%">
+    	{% for itr in items %}
+    	<tr>
+    		<td> {{itr.id }} </td>
+    		<td> {{ itr.event }} </td>
+    		<td> {{ itr.date }} </td>
+    		<td> {{ itr.extra_text }} </td>
+    	</tr>
+    	{% endfor %}
+    </table>
+</div>
+{% endblock %}

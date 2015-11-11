@@ -1,17 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>小小深成长记录</title>
-</head>
-<body>
-<h1>小小深成长记录</h1>
 
-<div>
-    <form method="POST" action="/submit">
-        {{ form.name.label }} {{ form.name() }}
-        {{ form.submit() }}
-    </form>
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}小小深成长记录{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+  <!-- ... -->
 </div>
+{% endblock %}
 
-</body>
-</html>
+{% block content %}
+  <h1>小小深成长记录</h1>
+  <form method="POST" action="/submit">
+  	{{ wtf.quick_form(form) }}
+  </form>
+  
+{% endblock %}
