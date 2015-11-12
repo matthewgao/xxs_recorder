@@ -1,0 +1,30 @@
+{% macro pagination_tool(paginate, endpoint) %}
+
+<ul class="pagination pagination-centered">
+    
+        <li {% if not paginate.has_prev %} class="disabled" {% endif %}>
+            <a href="{{ url_for(endpoint, page=paginate.page-1)}}">上一页</a>
+        </li>
+    
+    {% for itr in paginate.iter_pages(left_edge=2, left_current=2, right_current=4, right_edge=2) %}
+        {% if itr %}
+        <li {% if itr == paginate.page %} class="active" {% endif %}>
+            <a href="{{ url_for(endpoint, page=itr)}}">{{ itr }}</a>
+        </li>
+        {% else %}
+        <li>
+            <a href="#">&hellip;</a>
+        </li>
+        {% endif %}
+
+    {% endfor %}
+
+
+        <li {% if not paginate.has_next %} class="disabled" {% endif %}>
+            <a href="{{ url_for(endpoint, page=paginate.page+1)}}">下一页</a>
+        </li>
+
+
+</ul>
+
+{% endmacro %}
