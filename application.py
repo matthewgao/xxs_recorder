@@ -7,30 +7,25 @@ __author__ = 'Matthew Gao'
 
 # from db_model import *
 from flask import Flask, render_template, request
-from db import init_db
 from flask_bootstrap import Bootstrap
+from db import MyDataBase
 
+bootstrap = Bootstrap()
 
-# from db_model import init_db
+def create_app():
+    app = Flask(__name__)
+    app.debug = True
+    app.secret_key = 'development key'
+    app_ctx = app.app_context()
+    app_ctx.push()
+    bootstrap.init_app(app)
+    MyDataBase.app = app
+    MyDataBase.init_db()
+    from route import main as main_blue_print
+    app.register_blueprint(main_blue_print)
+    return app
 
-app = Flask(__name__)
-app.debug = True
-app.secret_key = 'development key'
-
-class RouteRegister(object):
-    """docstring for RouteRegister"""
-    def __init__(self, app):
-        super(RouteRegister, self).__init__()
-        self.app = app
-
-    def add_route(self, res, url, **kargs):
-        res = self.app.route(url, **kargs)(res)
-
-init_db(app)
-Bootstrap(app)
-
-from route import register_all
-register_all(RouteRegister(app))
+app = create_app()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)

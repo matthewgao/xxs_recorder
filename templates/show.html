@@ -1,25 +1,40 @@
 
 {% extends "bootstrap/base.html" %}
+{% import "_page_tool.html" as page_tool %}
 {% block title %}小小深成长记录{% endblock %}
 
 {% block navbar %}
-<div class="navbar navbar-fixed-top">
-  <!-- ... -->
-</div>
+{% include "nav.html" %}
 {% endblock %}
 
 {% block content %}
-  <h1>小小深成长记录</h1>
-  <div>
-    <table style="width:100%">
-    	{% for itr in items %}
-    	<tr>
-    		<td> {{itr.id }} </td>
-    		<td> {{ itr.event }} </td>
-    		<td> {{ itr.date }} </td>
-    		<td> {{ itr.extra_text }} </td>
-    	</tr>
-    	{% endfor %}
-    </table>
+  
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="col-lg-6">
+        <table class="table table-hover" style="width:100%">
+          <caption>小小深成长记录</caption>
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>事件</th>
+              <th>时间</th>
+              <th>备注</th>
+            </tr>
+          </thead>
+          <tbody>
+          	{% for itr in items %}
+          	<tr>
+          		<td> {{itr.id }} </td>
+          		<td> {{ itr.event }} </td>
+          		<td> {{ itr.date }} </td>
+          		<td> {{ itr.extra_text }} </td>
+          	</tr>
+          	{% endfor %}
+          </tbody>
+        </table>
+        {{page_tool.pagination_tool(paginate, 'main.show')}}
+      </div>
+  </div>
 </div>
 {% endblock %}

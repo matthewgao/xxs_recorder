@@ -2,7 +2,9 @@
 # coding=utf-8
 # Created Time: 2015-11-09
 
-from db import db
+from db import MyDataBase
+
+db = MyDataBase.get_db()
 
 class GrowRecord(db.Model):
 	id = db.Column(db.Integer, primary_key=True)

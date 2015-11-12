@@ -1,14 +1,36 @@
 #!/usr/bin/env python3
 # coding=utf-8
 # Created Time: 2015-11-09
-
 from flask.ext.sqlalchemy import SQLAlchemy
 
-db = None
+class MyDataBase(object):
+    """docstring for MyDataBase"""
 
-def init_db(app):
-	global db 
-	db = SQLAlchemy(app)
-	app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/xxs?charset=utf8'
-	db.init_app(app)
-	db.create_all()
+    app = None
+    db = None
+    
+    @classmethod
+    def get_db(cls):
+        if not cls.app:
+            print("MyDataBase app is None")
+            return None
+        if cls.db:
+            return cls.db
+        cls.init_db()
+        return cls.db
+
+    @classmethod
+    def init_db(cls):
+        if not cls.app:
+            print("MyDataBase app is None")
+            return
+
+        cls.db = SQLAlchemy(cls.app)
+        cls.app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/xxs?charset=utf8'
+        # cls.db.init_app(cls.app)
+        from db_model import GrowRecord
+        cls.db.create_all()
+
+
+
+        

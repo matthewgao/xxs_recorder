@@ -1,18 +1,60 @@
 
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% import "_page_tool.html" as page_tool %}
 {% block title %}小小深成长记录{% endblock %}
 
+
 {% block navbar %}
-<div class="navbar navbar-fixed-top">
-  <!-- ... -->
-</div>
+{% include "nav.html" %}
 {% endblock %}
 
+
 {% block content %}
-  <h1>小小深成长记录</h1>
-  <form method="POST" action="/submit">
-  	{{ wtf.quick_form(form) }}
-  </form>
-  
-{% endblock %}
+
+
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="col-lg-3 col-xs-6 col-sm-6">
+
+            <form method="POST" action="/submit">
+                <fieldset>
+
+                     <legend>添加事件</legend> 
+                     {{ wtf.quick_form(form) }}
+                     <button type="submit" class="btn btn-success">提交</button>
+<!--                       <label>表签名</label>
+                    <input type="text" /> <span class="help-block">这里填写帮助信息.</span> 
+                     <label class="checkbox"><input type="checkbox" /> 勾选同意</label> 
+                     <button type="submit" class="btn">提交</button> -->
+                </fieldset>
+            </form>
+        </div>
+        <div class="col-lg-9 col-xs-6 col-sm-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                      <th>序号</th>
+                      <th>事件</th>
+                      <th>时间</th>
+                      <th>备注</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for itr in items %}
+                    <tr>
+                        <td> {{itr.id }} </td>
+                        <td> {{ itr.event }} </td>
+                        <td> {{ itr.date }} </td>
+                        <td> {{ itr.extra_text }} </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {{page_tool.pagination_tool(paginate, 'main.index')}}
+
+        </div>
+    </div>
+</div>
+    {% endblock %}
