@@ -3,6 +3,11 @@
 {% import "_page_tool.html" as page_tool %}
 {% block title %}小小深成长记录{% endblock %}
 
+{% block head %}
+{{ super()}}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+{% endblock %}
+
 {% block navbar %}
 {% include "nav.html" %}
 {% endblock %}

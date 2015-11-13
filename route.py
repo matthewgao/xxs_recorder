@@ -10,7 +10,7 @@ from db_model import GrowRecord
 from datetime import datetime
 
 main = Blueprint('main', __name__)
-current_app.config['FLASK_COUNT_PER_PAGE'] = 2
+current_app.config['FLASK_COUNT_PER_PAGE'] = 8
 
 class RouteRegister(object):
     """docstring for RouteRegister"""
