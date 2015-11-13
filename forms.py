@@ -17,3 +17,7 @@ class RecordForm(Form):
     date = StringField('时间')
     extra_text = StringField('备注', default='无')
     # submit = SubmitField('提交')
+
+class DiaryForm(Form):
+	text = TextField("Say something")
+	tags = StringField('Tag', default='无')

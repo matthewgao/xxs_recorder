@@ -54,9 +54,14 @@ def show():
 def about():
     return render_template('about.html'), 200
 
+def diary():
+	if request.method == 'POST':
+		return render_template('index.html')
+
 def register_all(register):
+	register.add_route(index, '/', methods=['GET'])
     register.add_route(submit, '/submit', methods=['POST'])
-    register.add_route(index, '/', methods=['GET'])
+    register.add_route(diary, '/diary', methods=['GET', 'POST'])
     register.add_route(show, '/show', methods=['GET'])
     register.add_route(about, '/about', methods=['GET'])
 
