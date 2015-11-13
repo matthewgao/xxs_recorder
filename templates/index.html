@@ -17,7 +17,7 @@
 	window.onload = current_time()
 	function current_time(){
 		cur_date = new Date()
-		str = cur_date.getFullYear() + '-' + (cur_date.getMonth()+1) + '-' + cur_date.getDate() + ' ' + cur_date.toLocaleTimeString()
+		str = cur_date.getFullYear() + '-' + (cur_date.getMonth()+1) + '-' + cur_date.getDate() + ' ' + cur_date.getHours() + ':' + cur_date.getMinutes() + ':' + cur_date.getSeconds()
 		document.getElementById('date').value = str
 	}
 
