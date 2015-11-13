@@ -10,6 +10,21 @@
 
 {% block title %}小小深成长记录{% endblock %}
 
+{% block scripts %}
+{{super()}}
+
+<script type="text/javascript">
+	window.onload = current_time()
+	function current_time(){
+		cur_date = new Date()
+		str = cur_date.getFullYear() + '-' + (cur_date.getMonth()+1) + '-' + cur_date.getDate() + ' ' + cur_date.toLocaleTimeString()
+		document.getElementById('date').value = str
+	}
+
+</script>
+
+{% endblock %}
+
 {% block navbar %}
 {% include "nav.html" %}
 {% endblock %}
@@ -26,7 +41,10 @@
 
                      <legend>添加事件</legend> 
                      {{ wtf.quick_form(form) }}
-                     <button type="submit" class="btn btn-success">提交</button>
+
+                     <button type="submit" class="btn btn-success btn-block">提交</button>
+                     <button type="button" class="btn btn-info btn-block" onclick="current_time()" >刷新时间</button>
+
 <!--                       <label>表签名</label>
                     <input type="text" /> <span class="help-block">这里填写帮助信息.</span> 
                      <label class="checkbox"><input type="checkbox" /> 勾选同意</label> 
@@ -61,3 +79,4 @@
     </div>
 </div>
     {% endblock %}
+
