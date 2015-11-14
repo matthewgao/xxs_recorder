@@ -26,14 +26,15 @@
 {% endblock %}
 
 {% block navbar %}
+{{super()}}
 {% include "nav.html" %}
 {% endblock %}
 
 
 {% block content %}
-
+{{super()}}
 <div class="container-fluid">
-	<div class="row-fluid">
+	<div class="row-fluid visible-lg">
 	<div class="col-lg-12">
 		<div id="myCarousel" class="carousel slide">
 		   <!-- 轮播（Carousel）指标 -->
@@ -62,8 +63,9 @@
 		</div> 
 		</div>
 	</div>
+
     <div class="row-fluid">
-        <div class="col-lg-3 col-xs-6 col-sm-6">
+        <div class="col-lg-3 col-xs-12 col-sm-6">
 
             <form method="POST" action="/submit">
                 <fieldset>
@@ -81,7 +83,7 @@
                 </fieldset>
             </form>
         </div>
-        <div class="col-lg-9 col-xs-6 col-sm-6">
+        <div class="col-lg-9 visible-lg visible-sm">
             <table class="table">
                 <thead>
                     <tr>

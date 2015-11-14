@@ -19,5 +19,5 @@ class RecordForm(Form):
     # submit = SubmitField('提交')
 
 class DiaryForm(Form):
-	text = TextField("Say something")
-	tags = StringField('Tag', default='无')
+	text = TextField("给小小深写点什么吧")
+	tags = StringField('Tag', default='')

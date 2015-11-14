@@ -3,10 +3,10 @@
 # Created Time: 2015-11-09
 
 # import application
-from forms import RecordForm
+from forms import RecordForm, DiaryForm
 from flask import Flask, render_template, request, url_for, redirect, Blueprint, current_app
 from db import MyDataBase
-from db_model import GrowRecord
+from db_model import GrowRecord, Diary
 from datetime import datetime
 
 main = Blueprint('main', __name__)
@@ -27,8 +27,8 @@ def index():
     page = request.args.get('page', 1, type=int)
     print(page)
     form = RecordForm()
-    rc = GrowRecord.query.order_by(GrowRecord.date).all()
-    rc = GrowRecord.query.order_by(GrowRecord.date).paginate(page, 
+    # rc = GrowRecord.query.order_by(GrowRecord.date).all()
+    rc = GrowRecord.query.order_by(GrowRecord.date.desc()).paginate(page, 
         per_page=current_app.config['FLASK_COUNT_PER_PAGE'], error_out=False)
 
     items = rc.items
@@ -37,6 +37,7 @@ def index():
 def submit():
     rc = GrowRecord(request.form['event'], request.form['date'], request.form['extra_text'])
     db = MyDataBase.get_db()
+    # print(db)
     db.session.add(rc)
     db.session.commit()
     # return render_template('submit.html', form=request.form), 200
@@ -44,8 +45,8 @@ def submit():
 
 def show():
     page = request.args.get('page', 1, type=int)
-    rc = GrowRecord.query.order_by(GrowRecord.date).all()
-    rc = GrowRecord.query.order_by(GrowRecord.date).paginate(page, 
+    # rc = GrowRecord.query.order_by(GrowRecord.date).all()
+    rc = GrowRecord.query.order_by(GrowRecord.date.desc()).paginate(page, 
         per_page=current_app.config['FLASK_COUNT_PER_PAGE'], error_out=False)
     # print(rc)
     items = rc.items
@@ -55,11 +56,23 @@ def about():
     return render_template('about.html'), 200
 
 def diary():
-	if request.method == 'POST':
-		return render_template('index.html')
+    if request.method == 'POST':
+        rc = Diary(str(datetime.now()), request.form['text'], request.form['tags'])
+        db = MyDataBase.get_db()
+        db.session.add(rc)
+        db.session.commit()
+        return redirect(url_for('main.diary'))
+    form = DiaryForm()
+    page = request.args.get('page', 1, type=int)
+    # rc = Diary.query.order_by(Diary.date).all()
+    rc = Diary.query.order_by(Diary.date.desc()).paginate(page, 
+        per_page=current_app.config['FLASK_COUNT_PER_PAGE'], error_out=False)
+    # print(rc)
+    items = rc.items
+    return render_template('diary.html', form=form, items=items), 200
 
 def register_all(register):
-	register.add_route(index, '/', methods=['GET'])
+    register.add_route(index, '/', methods=['GET'])
     register.add_route(submit, '/submit', methods=['POST'])
     register.add_route(diary, '/diary', methods=['GET', 'POST'])
     register.add_route(show, '/show', methods=['GET'])
