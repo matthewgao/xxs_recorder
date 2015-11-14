@@ -22,3 +22,16 @@ class GrowRecord(db.Model):
 
 
 
+class Diary(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	date = db.Column(db.DateTime)
+	text = db.Column(db.Text)
+	tags = db.Column(db.String(80))
+
+	def __init__(self, date, text, tags):
+		self.date = date
+		self.text = text
+		self.tags = tags
+
+	def __repr__(self):
+		return "{0.date} {0.tags}".format(self)
