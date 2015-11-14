@@ -1,0 +1,50 @@
+{% extends "bootstrap/base.html" %}
+{% import "_page_tool.html" as page_tool %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}小小深成长记录{% endblock %}
+
+{% block head %}
+{{ super()}}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+{% endblock %}
+
+{% block navbar %}
+{% include "nav.html" %}
+{% endblock %}
+
+{% block content %}
+  
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="col-lg-3">
+      <form method="POST" action="{{ url_for("main.diary") }}">
+        <fieldset>
+
+        <legend>写个日记</legend> 
+          {{ wtf.quick_form(form) }}
+        <button type="submit" class="btn btn-success btn-block">提交</button>
+        </fieldset>
+    </div>
+      <div class="col-lg-9">
+        <table class="table table-hover" style="width:100%">
+          <caption>小小深成长记录</caption>
+          <thead>
+            <tr>
+
+            </tr>
+          </thead>
+          <tbody>
+            {% for itr in items %}
+            <tr> <td> {{ itr.date }} </td> </tr>
+            <tr> <td> {{ itr.text }} </td> </tr>
+            <tr> <td> {{ itr.tags }} </td> </tr>
+
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+  </div>
+</div>
+{% endblock %}

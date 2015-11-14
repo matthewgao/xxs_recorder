@@ -25,6 +25,7 @@
               <th>事件</th>
               <th>时间</th>
               <th>备注</th>
+              <th>操作</th>
             </tr>
           </thead>
           <tbody>
@@ -33,7 +34,8 @@
           		<td> {{itr.id }} </td>
           		<td> {{ itr.event }} </td>
           		<td> {{ itr.date }} </td>
-          		<td> {{ itr.extra_text }} </td>
+              <td> {{ itr.extra_text }} </td>
+          		<td> <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#myModal">删除</button> </td>
           	</tr>
           	{% endfor %}
           </tbody>
@@ -42,4 +44,31 @@
       </div>
   </div>
 </div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" 
+               data-dismiss="modal" aria-hidden="true">
+                  &times;
+            </button>
+            <h4 class="modal-title" id="myModalLabel">
+               删除这条记录？
+            </h4>
+         </div>
+         <div class="modal-body">
+            确认是否删除，记录将不可恢复
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-success">
+               删除
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
 {% endblock %}

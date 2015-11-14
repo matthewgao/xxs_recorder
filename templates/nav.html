@@ -1,5 +1,5 @@
 
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-inverse " role="navigation">
    <div class="navbar-header">
        <div>
            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#my-navbar-collapse">
@@ -9,14 +9,15 @@
                <span class="icon-bar"></span>
            </button>
        </div>
-       <a class="navbar-brand" href="#">小小深记录</a>
+       <a class="navbar-brand" href="#">小小深记录 <span class="label">Beta</span></a>
    </div>
    <div>
       <div class="collapse navbar-collapse" id="my-navbar-collapse">
           <ul class="nav navbar-nav">
              <li><a href="/">Home</a></li>
-             <li><a href="/show">Show All</a></li>
-             <li><a href="/about">About</a></li>
+             <li><a href="{{ url_for("main.show")}}">Show All</a></li>
+             <li><a href="{{ url_for("main.diary")}}">Diary</a></li>
+             <li><a href="{{ url_for("main.about")}}">About</a></li>
           </ul>
       </div>
    </div>
