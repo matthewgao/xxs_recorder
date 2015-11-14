@@ -71,12 +71,24 @@ def diary():
     items = rc.items
     return render_template('diary.html', form=form, items=items), 200
 
+def delete(kind, id):
+    if kind == "grow_record":
+        db = MyDataBase.get_db()
+        rc = GrowRecord.query.filter_by(id=id).first()
+        if rc:
+            db.session.delete(rc)
+            db.session.commit()
+            return "", 200 
+    return "", 404
+
+
 def register_all(register):
     register.add_route(index, '/', methods=['GET'])
     register.add_route(submit, '/submit', methods=['POST'])
     register.add_route(diary, '/diary', methods=['GET', 'POST'])
     register.add_route(show, '/show', methods=['GET'])
     register.add_route(about, '/about', methods=['GET'])
+    register.add_route(delete, '/delete/<kind>/<id>', methods=['GET'])
 
 register_all(RouteRegister(main))
 

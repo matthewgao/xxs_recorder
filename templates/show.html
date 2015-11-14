@@ -8,6 +8,48 @@
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 {% endblock %}
 
+{% block scripts %}
+{{super()}}
+
+<script type="text/javascript">
+
+  var g_id = null
+  var xhr = null
+
+  $('#myModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    g_id = recipient
+  })
+
+  function del(){
+    xhr = new XMLHttpRequest();
+    if(xhr){
+      xhr.onreadystatechange = callback;
+      xhr.open("GET", "/delete/grow_record/"+g_id, true)
+      xhr.send(null)
+    }
+  }
+
+  function callback(){
+    if(xhr.readyState == 4){
+      if(xhr.status == 200){
+        var n = document.getElementById(g_id);
+        // alert(n)
+        if(n != null){
+          n.parentNode.removeChild(n);
+        }
+      }
+    }
+    //clost the Modal
+    $('#myModal').modal('hide')
+  }
+</script>
+
+{% endblock %}
+
 {% block navbar %}
 {% include "nav.html" %}
 {% endblock %}
@@ -15,6 +57,12 @@
 {% block content %}
   
 <div class="container-fluid">
+  {% for message in get_flashed_messages() %}
+  <div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+  </div>
+  {% endfor %}
   <div class="row-fluid">
     <div class="col-lg-6">
         <table class="table table-hover" style="width:100%">
@@ -30,12 +78,12 @@
           </thead>
           <tbody>
           	{% for itr in items %}
-          	<tr>
+          	<tr id="{{ itr.id }}">
           		<td> {{itr.id }} </td>
           		<td> {{ itr.event }} </td>
           		<td> {{ itr.date }} </td>
               <td> {{ itr.extra_text }} </td>
-          		<td> <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#myModal">删除</button> </td>
+          		<td> <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.id }}">删除</button> </td>
           	</tr>
           	{% endfor %}
           </tbody>
@@ -65,7 +113,7 @@
             <button type="button" class="btn btn-default" 
                data-dismiss="modal">关闭
             </button>
-            <button type="button" class="btn btn-success">
+            <button type="button" class="btn btn-success" onclick="del()">
                删除
             </button>
          </div>
