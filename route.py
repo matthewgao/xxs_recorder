@@ -59,7 +59,7 @@ def diary():
 		return render_template('index.html')
 
 def register_all(register):
-	register.add_route(index, '/', methods=['GET'])
+    register.add_route(index, '/', methods=['GET'])
     register.add_route(submit, '/submit', methods=['POST'])
     register.add_route(diary, '/diary', methods=['GET', 'POST'])
     register.add_route(show, '/show', methods=['GET'])
