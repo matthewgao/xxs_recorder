@@ -59,7 +59,7 @@ def about():
 
 def diary():
     if request.method == 'POST':
-        rc = Diary(str(datetime.now()), request.form['text'], request.form['tags'])
+        rc = Diary(datetime.now(), request.form['text'], request.form['tags'])
         db = MyDataBase.get_db()
         db.session.add(rc)
         db.session.commit()
