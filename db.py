@@ -26,8 +26,11 @@ class MyDataBase(object):
             return
 
         cls.db = SQLAlchemy(cls.app)
-        # cls.app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@192.168.10.101/xxs?charset=utf8'
-        cls.app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:password@192.168.10.101/xxs?charset=utf8'
+
+        cls.app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@192.168.10.101/xxs?charset=utf8'
+
+        # cls.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////root/xxs.db'
+
         # cls.db.init_app(cls.app)
         from db_model import GrowRecord
         cls.db.create_all()

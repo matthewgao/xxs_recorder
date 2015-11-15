@@ -6,7 +6,7 @@ __author__ = 'Matthew Gao'
 
 
 # from db_model import *
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, current_app
 from flask_bootstrap import Bootstrap
 from db import MyDataBase
 
@@ -18,6 +18,7 @@ def create_app():
     app.secret_key = 'development key'
     app_ctx = app.app_context()
     app_ctx.push()
+    current_app.config['FLASK_COUNT_PER_PAGE'] = 8
     bootstrap.init_app(app)
     MyDataBase.app = app
     MyDataBase.init_db()
