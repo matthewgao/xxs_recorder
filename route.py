@@ -35,7 +35,9 @@ def index():
     return render_template('index.html', form=form, items=items, paginate=rc), 200
 
 def submit():
-    rc = GrowRecord(request.form['event'], request.form['date'], request.form['extra_text'])
+    rc = GrowRecord(request.form['event'], 
+            datetime.strptime(request.form['date'], '%Y-%m-%d %H:%M:%S'), 
+            request.form['extra_text'])
     db = MyDataBase.get_db()
     # print(db)
     db.session.add(rc)
