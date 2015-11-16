@@ -99,7 +99,7 @@ def diary():
         db.session.roll_back()
         return "", 404
     items = rc.items
-    return render_template('diary.html', form=form, items=items), 200
+    return render_template('diary.html', form=form, items=items, paginate=rc), 200
 
 def delete(kind, id):
     if kind == "grow_record":
