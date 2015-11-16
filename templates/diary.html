@@ -42,14 +42,15 @@
           </thead>
           <tbody>
             {% for itr in items %}
-            <tr> <td> {{ itr.date }} </td> </tr>
-            <tr> <td> {{ itr.text }} </td> </tr>
-            <tr> <td> {{ itr.tags }} </td> </tr>
+
+              <tr> <td> {{ itr.date }} </td> </tr>
+              <tr> <td> {{ itr.text }} </td> </tr>
+              <tr> <td> {{ itr.tags }} </td> </tr>
 
             {% endfor %}
           </tbody>
         </table>
-
+        {{page_tool.pagination_tool(paginate, 'main.diary')}}
       </div>
   </div>
 </div>

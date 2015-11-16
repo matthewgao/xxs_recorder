@@ -109,9 +109,10 @@ def delete(kind, id):
             try:
                 db.session.delete(rc)
                 db.session.commit()
+                return "", 200
             except Exception as e:
                 db.session.roll_back()
-            return "", 200 
+             
     return "", 404
 
 
