@@ -62,6 +62,7 @@ def submit():
 
 def show():
     page = request.args.get('page', 1, type=int)
+    page = page if page > 0 else 1
     # rc = GrowRecord.query.order_by(GrowRecord.date).all()
     rc = GrowRecord.query.order_by(GrowRecord.date.desc()).paginate(page, 
         per_page=current_app.config['FLASK_COUNT_PER_PAGE'], error_out=False)
@@ -91,6 +92,8 @@ def diary():
         return redirect(url_for('main.diary'))
     form = DiaryForm()
     page = request.args.get('page', 1, type=int)
+    page = page if page > 0 else 1
+
     # rc = Diary.query.order_by(Diary.date).all()
     try:
         rc = Diary.query.order_by(Diary.date.desc()).paginate(page, 
