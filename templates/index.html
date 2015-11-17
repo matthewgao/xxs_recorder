@@ -19,7 +19,29 @@
 		cur_date = new Date()
 		str = cur_date.getFullYear() + '-' + (cur_date.getMonth()+1) + '-' + cur_date.getDate() + ' ' + cur_date.getHours() + ':' + cur_date.getMinutes() + ':' + cur_date.getSeconds()
 		document.getElementById('date').value = str
+        return str;
 	}
+
+    function validate(){
+        var re = /\d{4}-[01]?\d-[0123]?\d [012]?\d:[0-6]?\d:[0-6]?\d/;
+        var tmp;
+        if (tmp = document.getElementById("tmp-div")){
+            tmp.parentNode.removeChild(tmp);
+        }
+
+        if (re.test(document.getElementById('date').value)){
+            // alert("submit");
+            document.getElementById('myform').submit();
+        }else{
+
+            var dom = document.getElementById('row');
+            var newDiv = document.createElement("div");
+            newDiv.className = "alert alert-warning fade in";
+            newDiv.id = "tmp-div"
+            newDiv.innerHTML = "事件格式不对，正确格式为：" + current_time();
+            dom.parentNode.insertBefore(newDiv, dom);
+        }
+    }
 
 </script>
 
@@ -54,17 +76,17 @@
         </div>
         </div>
 </div>
-<div class="container-fluid">
-    <div class="row-fluid">
+<div class="container-fluid" >
+    <div class="row-fluid" id="row">
         <div class="col-lg-3 col-xs-12 col-sm-6">
 
-            <form method="POST" action="/submit">
+            <form id="myform" method="POST" action="/submit">
                 <fieldset>
 
                      <legend>添加事件</legend> 
                      {{ wtf.quick_form(form) }}
 
-                     <button type="submit" class="btn btn-success btn-block">提交</button>
+                     <button type="button" class="btn btn-success btn-block" onclick="validate()">提交</button>
                      <button type="button" class="btn btn-info btn-block" onclick="current_time()" >刷新时间</button>
 
 <!--                       <label>表签名</label>
