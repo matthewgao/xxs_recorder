@@ -124,12 +124,15 @@ def draw():
     db = MyDataBase.get_db()
     result = { "name": "flare", "children": [] }
     try:
-        for day in range(-5,1):
+        for day in range(-10,1):
             day_sum = db.session.query(GrowRecord.event, func.count(GrowRecord.event)).\
                 filter(GrowRecord.date >= (date.today()+ timedelta(days = day)), GrowRecord.date <= (date.today() + timedelta(days = day+1))).\
                 group_by(GrowRecord.event).all()
-            result["children"].append({"name": day, "children" : [{ "name" :itr[0], "size": itr[1] } for itr in day_sum ]})
-        print(result)
+            result["children"].append({
+                "name": day, 
+                "children" : [{ "name" :str((date.today()+ timedelta(days = day))) + '-' + itr[0], 
+                                "size": itr[1] } for itr in day_sum ]})
+        # print(result)
     except Exception:
         db.session.roll_back()
         return "", 404
