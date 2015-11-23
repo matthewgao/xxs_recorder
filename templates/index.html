@@ -5,7 +5,7 @@
 
 {% block head %}
 {{ super()}}
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+{% include "_header.html" %}
 {% endblock %}
 
 {% block title %}小小深成长记录{% endblock %}
@@ -23,7 +23,7 @@
 	}
 
     function validate(){
-        var re = /\d{4}-[01]?\d-[0123]?\d [012]?\d:[0-6]?\d:[0-6]?\d/;
+        var re = /\d{4}-[01]?\d-[0123]?\d [012]?\d:[0-6]?\d:[0-6]?[0-9]{1}$/;
         var tmp;
         if (tmp = document.getElementById("tmp-div")){
             tmp.parentNode.removeChild(tmp);
@@ -36,9 +36,9 @@
 
             var dom = document.getElementById('row');
             var newDiv = document.createElement("div");
-            newDiv.className = "alert alert-warning fade in";
+            newDiv.className = "alert alert-danger fade in";
             newDiv.id = "tmp-div"
-            newDiv.innerHTML = "事件格式不对，正确格式为：" + current_time();
+            newDiv.innerHTML = "时间格式不对，正确格式为：" + current_time();
             dom.parentNode.insertBefore(newDiv, dom);
         }
     }
@@ -86,13 +86,9 @@
                      <legend>添加事件</legend> 
                      {{ wtf.quick_form(form) }}
 
-                     <button type="button" class="btn btn-success btn-block" onclick="validate()">提交</button>
-                     <button type="button" class="btn btn-info btn-block" onclick="current_time()" >刷新时间</button>
+                     <button type="button" class="btn btn-success btn-block" onclick="validate()"><span class="glyphicon glyphicon-ok"/>&nbsp;提交</button>
+                     <button type="button" class="btn btn-info btn-block" onclick="current_time()" ><span class="glyphicon glyphicon-refresh"/>&nbsp;刷新时间</button>
 
-<!--                       <label>表签名</label>
-                    <input type="text" /> <span class="help-block">这里填写帮助信息.</span> 
-                     <label class="checkbox"><input type="checkbox" /> 勾选同意</label> 
-                     <button type="submit" class="btn">提交</button> -->
                 </fieldset>
             </form>
         </div>

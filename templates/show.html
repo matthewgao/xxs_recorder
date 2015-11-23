@@ -5,7 +5,7 @@
 
 {% block head %}
 {{ super()}}
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+{% include "_header.html" %}
 {% endblock %}
 
 {% block scripts %}
@@ -65,31 +65,36 @@
   {% endfor %}
   <div class="row-fluid">
     <div class="col-lg-6">
-        <table class="table table-hover" style="width:100%">
-          <caption>小小深成长记录</caption>
-          <thead>
-            <tr>
-              <th>序号</th>
-              <th>事件</th>
-              <th>时间</th>
-              <th>备注</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-          	{% for itr in items %}
-          	<tr id="{{ itr.id }}">
-          		<td> {{itr.id }} </td>
-          		<td> {{ itr.event }} </td>
-          		<td> {{ itr.date }} </td>
-              <td> {{ itr.extra_text }} </td>
-          		<td> <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.id }}">删除</button> </td>
-          	</tr>
-          	{% endfor %}
-          </tbody>
-        </table>
-        {{page_tool.pagination_tool(paginate, 'main.show')}}
+      <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">小小深成长记录</div>
+          <table class="table table-hover" style="width:100%">
+            <thead>
+              <tr>
+                <th>序号</th>
+                <th>事件</th>
+                <th>时间</th>
+                <th>备注</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+            	{% for itr in items %}
+            	<tr id="{{ itr.id }}">
+            		<td> {{itr.id }} </td>
+            		<td> {{ itr.event }} </td>
+            		<td> {{ itr.date }} </td>
+                <td> {{ itr.extra_text }} </td>
+            		<td> <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.id }}"><span class="glyphicon glyphicon-remove"/></button> </td>
+            	</tr>
+            	{% endfor %}
+            </tbody>
+          </table>
+         
       </div>
+       {{page_tool.pagination_tool(paginate, 'main.show')}}
+    </div>
+    </div>
   </div>
 </div>
 

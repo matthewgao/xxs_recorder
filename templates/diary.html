@@ -6,7 +6,7 @@
 
 {% block head %}
 {{ super()}}
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+{% include "_header.html" %}
 {% endblock %}
 
 {% block navbar %}
@@ -25,33 +25,34 @@
   <div class="row-fluid">
     <div class="col-lg-3">
       <form method="POST" action="{{ url_for("main.diary") }}">
-        <fieldset>
-
-        <legend>写个日记</legend> 
-          {{ wtf.quick_form(form) }}
-        <button type="submit" class="btn btn-success btn-block">提交</button>
-        </fieldset>
+        <div class="form-group">
+          <label>写点什么</label>
+          {{ form.hidden_tag() }}
+          <textarea class="form-control" rows=3 name="text"></textarea>
+          <div class="input-group input-group-sm">
+          <span class="input-group-addon" id="sizing-addon3">Tag</span>
+          <input type="text" class="form-control" name="tags" aria-describedby="sizing-addon3">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-success btn-block" onclick="validate()"><span class="glyphicon glyphicon-ok"/>&nbsp;发布</button>
+      </form>
     </div>
-      <div class="col-lg-9">
-        <table class="table table-hover" style="width:100%">
-          <caption>小小深成长记录</caption>
-          <thead>
-            <tr>
+  </div>
+  <div class="col-lg-9">
 
-            </tr>
-          </thead>
-          <tbody>
-            {% for itr in items %}
+      {% for itr in items %}
+      <div class="panel panel-success">
 
-              <tr> <td> {{ itr.date }} </td> </tr>
-              <tr> <td> {{ itr.text }} </td> </tr>
-              <tr> <td> {{ itr.tags }} </td> </tr>
-
-            {% endfor %}
-          </tbody>
-        </table>
-        {{page_tool.pagination_tool(paginate, 'main.diary')}}
+        <div class="panel-heading">{{ itr.date }}</div>
+        <div class="panel-body">
+          {{ itr.text }}
+        </div>
+        <div class="panel-footer"><span class="label label-primary" >Tags</span>&nbsp;{{ itr.tags }}</div>
       </div>
+      {% endfor %}
+
+      {{page_tool.pagination_tool(paginate, 'main.diary')}}
+    </div>
   </div>
 </div>
 {% endblock %}

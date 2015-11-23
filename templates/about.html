@@ -1,6 +1,11 @@
 {% extends "bootstrap/base.html" %}
 {% block title %}小小深成长记录{% endblock %}
 
+{% block head %}
+{{ super()}}
+{% include "_header.html" %}
+{% endblock %}
+
 {% block navbar %}
 {% include "nav.html" %}
 {% endblock %}
