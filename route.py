@@ -9,6 +9,7 @@ from db import MyDataBase
 from db_model import GrowRecord, Diary
 from datetime import datetime, date, timedelta
 from sqlalchemy import func
+import json
 
 main = Blueprint('main', __name__)
 # current_app.config['FLASK_COUNT_PER_PAGE'] = 8
@@ -118,6 +119,23 @@ def delete(kind, id):
              
     return "", 404
 
+def draw():
+
+    db = MyDataBase.get_db()
+    result = { "name": "flare", "children": [] }
+    try:
+        for day in range(-5,1):
+            day_sum = db.session.query(GrowRecord.event, func.count(GrowRecord.event)).\
+                filter(GrowRecord.date >= (date.today()+ timedelta(days = day)), GrowRecord.date <= (date.today() + timedelta(days = day+1))).\
+                group_by(GrowRecord.event).all()
+            result["children"].append({"name": day, "children" : [{ "name" :itr[0], "size": itr[1] } for itr in day_sum ]})
+        print(result)
+    except Exception:
+        db.session.roll_back()
+        return "", 404
+
+    return json.dumps(result)
+
 
 def register_all(register):
     register.add_route(index, '/', methods=['GET'])
@@ -126,6 +144,7 @@ def register_all(register):
     register.add_route(show, '/show', methods=['GET'])
     register.add_route(about, '/about', methods=['GET'])
     register.add_route(delete, '/delete/<kind>/<id>', methods=['GET'])
+    register.add_route(draw, '/draw', methods=['GET'])
 
 register_all(RouteRegister(main))
 
