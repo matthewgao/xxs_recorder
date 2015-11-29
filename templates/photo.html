@@ -1,0 +1,59 @@
+
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block head %}
+{{ super()}}
+{% include "_header.html" %}
+{% endblock %}
+
+{% block title %}小小深成长记录{% endblock %}
+
+{% block scripts %}
+{{super()}}
+{% endblock %}
+
+{% block navbar %}
+{{super()}}
+{% include "nav.html" %}
+{% endblock %}
+
+
+{% block content %}
+{{super()}}
+
+
+<div class="container-fluid" >
+    <div class="row-fluid" id="row">
+        <div class="col-lg-3 col-xs-12 col-sm-6">
+
+            <form id="myform" method="POST" action="/pic/upload" enctype="multipart/form-data">
+                <fieldset>
+
+                     <legend>添加照片</legend> 
+                     {{ wtf.quick_form(form) }}
+
+                     <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-ok"/>&nbsp;提交</button>
+
+                </fieldset>
+            </form>
+        </div>
+        <div class="col-lg-9 visible-lg visible-sm">
+            <ul class="thumbnails">
+              <li class="span4">
+                <a href="#" class="thumbnail">
+                  <img data-src="holder.js/300x200" alt="">
+                </a>
+              </li>
+            <li class="span4">
+                <a href="#" class="thumbnail">
+                  <img data-src="holder.js/300x200" alt="">
+                </a>
+              </li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+    {% endblock %}

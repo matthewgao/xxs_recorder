@@ -3,12 +3,13 @@
 # Created Time: 2015-11-09
 
 # import application
-from forms import RecordForm, DiaryForm
+from forms import RecordForm, DiaryForm, UploadForm
 from flask import Flask, render_template, request, url_for, redirect, Blueprint, current_app, flash
 from db import MyDataBase
 from db_model import GrowRecord, Diary
 from datetime import datetime, date, timedelta
 from sqlalchemy import func
+from werkzeug import secure_filename
 import json
 
 main = Blueprint('main', __name__)
@@ -139,6 +140,19 @@ def draw():
 
     return json.dumps(result)
 
+def upload(type):
+    form = UploadForm()
+    if form.validate_on_submit():
+        filename = secure_filename(form.photo.data.filename)
+        form.photo.data.save('pic/' + filename)
+    else:
+        filename = None
+    # return render_template('upload.html', form=form, filename=filename)
+    return redirect(url_for('main.photos')), 200
+
+def photos():
+    form = UploadForm()
+    return render_template("photo.html", form=form), 200
 
 def register_all(register):
     register.add_route(index, '/', methods=['GET'])
@@ -148,6 +162,8 @@ def register_all(register):
     register.add_route(about, '/about', methods=['GET'])
     register.add_route(delete, '/delete/<kind>/<id>', methods=['GET'])
     register.add_route(draw, '/draw', methods=['GET'])
+    register.add_route(upload, '/<type>/upload', methods=['POST'])
+    register.add_route(photos, '/photo', methods=['GET'])
 
 register_all(RouteRegister(main))
 
