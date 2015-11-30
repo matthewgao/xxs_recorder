@@ -130,7 +130,7 @@ def draw():
                 group_by(GrowRecord.event).all()
             result["children"].append({
                 "name": day, 
-                "children" : [{ "name" :((date.today()+ timedelta(days = day))).strftime("%m-%d") + '-' + itr[0], 
+                "children" : [{ "name" :((date.today()+ timedelta(days = day))).strftime("%m-%d") + '\n' + itr[0], 
                                 "size": itr[1] } for itr in day_sum ]})
         # print(result)
     except Exception:
