@@ -3,12 +3,13 @@
 # Created Time: 2015-11-09
 
 # import application
-from forms import RecordForm, DiaryForm
+from forms import RecordForm, DiaryForm, UploadForm
 from flask import Flask, render_template, request, url_for, redirect, Blueprint, current_app, flash
 from db import MyDataBase
 from db_model import GrowRecord, Diary
 from datetime import datetime, date, timedelta
 from sqlalchemy import func
+from werkzeug import secure_filename
 import json
 
 main = Blueprint('main', __name__)
@@ -59,14 +60,26 @@ def submit():
         db.session.roll_back()
         return "", 404
     # return render_template('submit.html', form=request.form), 200
-    return redirect(url_for('main.show'))
+    return redirect(url_for('main.index'))
 
 def show():
     page = request.args.get('page', 1, type=int)
+    event = request.args.get('event', None, type=str)
+    # query_date = request.args.get('date', None, type=str)
     page = page if page > 0 else 1
-    # rc = GrowRecord.query.order_by(GrowRecord.date).all()
-    rc = GrowRecord.query.order_by(GrowRecord.date.desc()).paginate(page, 
-        per_page=current_app.config['FLASK_COUNT_PER_PAGE'], error_out=False)
+
+    rc = None
+    if event is not None:
+        rc = GrowRecord.query.filter(
+            GrowRecord.event==event, 
+            GrowRecord.date >= date.today(), 
+            GrowRecord.date <= (date.today() + timedelta(days = 1))).order_by(
+                GrowRecord.date.desc()).paginate(page, 
+                                            per_page=current_app.config['FLASK_COUNT_PER_PAGE'], 
+                                            error_out=False)
+    else:
+        rc = GrowRecord.query.order_by(GrowRecord.date.desc()).paginate(page, 
+            per_page=current_app.config['FLASK_COUNT_PER_PAGE'], error_out=False)
     # print(rc)
     items = rc.items
 
@@ -139,6 +152,19 @@ def draw():
 
     return json.dumps(result)
 
+def upload(type):
+    form = UploadForm()
+    if form.validate_on_submit():
+        filename = secure_filename(form.photo.data.filename)
+        form.photo.data.save('pic/' + filename)
+    else:
+        filename = None
+    # return render_template('upload.html', form=form, filename=filename)
+    return redirect(url_for('main.photos')), 200
+
+def photos():
+    form = UploadForm()
+    return render_template("photo.html", form=form), 200
 
 def register_all(register):
     register.add_route(index, '/', methods=['GET'])
@@ -148,6 +174,8 @@ def register_all(register):
     register.add_route(about, '/about', methods=['GET'])
     register.add_route(delete, '/delete/<kind>/<id>', methods=['GET'])
     register.add_route(draw, '/draw', methods=['GET'])
+    register.add_route(upload, '/<type>/upload', methods=['POST'])
+    register.add_route(photos, '/photo', methods=['GET'])
 
 register_all(RouteRegister(main))
 
