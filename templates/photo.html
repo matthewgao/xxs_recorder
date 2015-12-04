@@ -12,6 +12,52 @@
 
 {% block scripts %}
 {{super()}}
+
+<script type="text/javascript">
+// document.getElementById('myform')
+
+function uploadFile(){
+    var xhr = new XMLHttpRequest();
+    var formData = new FormData(document.getElementById('myform'));
+    $("#barparent").addClass('in');
+    xhr.onreadystatechange = function(){
+        if(this.state == this.Done){
+            if(this.status == 200){
+                return;
+            }
+        }
+    }
+
+    xhr.upload.addEventListener("progress", function(event){
+        if (event.lengthComputable) {
+            var percentComplete = event.loaded*100 / event.total;
+            percentComplete = Math.round(percentComplete);
+            var bar = document.getElementById("bar");
+            bar.style.width = percentComplete.toString() + '%';
+            bar.innerHTML = percentComplete.toString() + '%';
+        } else {
+            // Unable to compute progress information since the total size is unknown
+        }
+    });
+
+    xhr.upload.addEventListener("load", function(event){
+        // alert("complete");
+        setTimeout(function(){
+            // $("#barparent").addClass('hidden');
+            $("#barparent").removeClass( "in");
+            $("#barparent").addClass( "out");
+        }, 3000);
+
+    });
+
+    
+
+    xhr.open("POST", "/pic/upload");
+    xhr.send(formData);
+
+}
+
+</script>
 {% endblock %}
 
 {% block navbar %}
@@ -34,10 +80,21 @@
                      <legend>添加照片</legend> 
                      {{ wtf.quick_form(form) }}
 
-                     <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-ok"/>&nbsp;提交</button>
+                     <button type="button" class="btn btn-success btn-block" onclick="uploadFile()">
+                        <span class="glyphicon glyphicon-ok"/>&nbsp;提交
+                    </button>
 
                 </fieldset>
             </form>
+            <div id="barparent" class="fade out" >
+                <div class="progress progress-striped active">
+                   <div id="bar" class="progress-bar progress-bar-success" role="progressbar" 
+                      aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" 
+                      style="width: 0%;">
+                      <span class="sr-only">40% 完成</span>
+                   </div>
+                </div>
+            </div>
         </div>
         <div class="col-lg-9 visible-lg visible-sm">
             <ul class="thumbnails">

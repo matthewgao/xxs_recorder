@@ -31,13 +31,16 @@ def index():
     print(page)
     form = RecordForm()
     # rc = GrowRecord.query.order_by(GrowRecord.date).all()
-    rc = GrowRecord.query.order_by(GrowRecord.date.desc()).paginate(page, 
-        per_page=current_app.config['FLASK_COUNT_PER_PAGE'], error_out=False)
+    rc = GrowRecord.query.order_by(GrowRecord.date.desc()).paginate(
+            page, 
+            per_page=current_app.config['FLASK_COUNT_PER_PAGE'], 
+            error_out=False)
 
     db = MyDataBase.get_db()
     try:
         day_sum = db.session.query(GrowRecord.event, func.count(GrowRecord.event)).\
-            filter(GrowRecord.date >= date.today(), GrowRecord.date <= (date.today() + timedelta(days = 1))).\
+            filter( GrowRecord.date >= date.today(), 
+                    GrowRecord.date <= (date.today() + timedelta(days = 1))).\
             group_by(GrowRecord.event).all()
     except Exception:
         db.session.roll_back()
@@ -71,15 +74,17 @@ def show():
     rc = None
     if event is not None:
         rc = GrowRecord.query.filter(
-            GrowRecord.event==event, 
-            GrowRecord.date >= date.today(), 
-            GrowRecord.date <= (date.today() + timedelta(days = 1))).order_by(
-                GrowRecord.date.desc()).paginate(page, 
+                GrowRecord.event==event, 
+                GrowRecord.date >= date.today(), 
+                GrowRecord.date <= (date.today() + timedelta(days = 1))).order_by(
+                                            GrowRecord.date.desc()).paginate(page, 
                                             per_page=current_app.config['FLASK_COUNT_PER_PAGE'], 
                                             error_out=False)
     else:
-        rc = GrowRecord.query.order_by(GrowRecord.date.desc()).paginate(page, 
-            per_page=current_app.config['FLASK_COUNT_PER_PAGE'], error_out=False)
+        rc = GrowRecord.query.order_by(GrowRecord.date.desc()).paginate(
+                page, 
+                per_page=current_app.config['FLASK_COUNT_PER_PAGE'], 
+                error_out=False)
     # print(rc)
     items = rc.items
 
@@ -138,13 +143,15 @@ def draw():
     result = { "name": "flare", "children": [] }
     try:
         for day in range(-10,1):
+            
             day_sum = db.session.query(GrowRecord.event, func.count(GrowRecord.event)).\
-                filter(GrowRecord.date >= (date.today()+ timedelta(days = day)), GrowRecord.date <= (date.today() + timedelta(days = day+1))).\
+                filter( GrowRecord.date >= (date.today()+ timedelta(days = day)), 
+                        GrowRecord.date <= (date.today() + timedelta(days = day+1))).\
                 group_by(GrowRecord.event).all()
-            result["children"].append({
-                "name": day, 
-                "children" : [{ "name" :((date.today()+ timedelta(days = day))).strftime("%m-%d") + '\n' + itr[0], 
-                                "size": itr[1] } for itr in day_sum ]})
+            
+            result["children"].append({ "name": day, 
+                        "children" : [{ "name" :((date.today()+ timedelta(days = day))).strftime("%m-%d") + '\n' + itr[0], 
+                        "size": itr[1] } for itr in day_sum ]})
         # print(result)
     except Exception:
         db.session.roll_back()
