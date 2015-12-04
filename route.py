@@ -6,11 +6,12 @@
 from forms import RecordForm, DiaryForm, UploadForm
 from flask import Flask, render_template, request, url_for, redirect, Blueprint, current_app, flash
 from db import MyDataBase
-from db_model import GrowRecord, Diary
+from db_model import GrowRecord, Diary, Picture
 from datetime import datetime, date, timedelta
 from sqlalchemy import func
 from werkzeug import secure_filename
 import json
+import os
 
 main = Blueprint('main', __name__)
 # current_app.config['FLASK_COUNT_PER_PAGE'] = 8
@@ -134,7 +135,22 @@ def delete(kind, id):
                 return "", 200
             except Exception as e:
                 db.session.roll_back()
-             
+    
+    if kind == "pic":
+        db = MyDataBase.get_db()
+        rc = Picture.query.filter_by(id=id).first()
+        full_path = rc.path
+        print(full_path)
+        if rc:
+            try:
+                db.session.delete(rc)
+                db.session.commit()
+                full_path = os.getcwd() + "/" + rc.path
+                if os.path.exists(full_path):
+                    os.remove(full_path)
+                return "", 200
+            except Exception as e:
+                db.session.roll_back()    
     return "", 404
 
 def draw():
@@ -161,9 +177,29 @@ def draw():
 
 def upload(type):
     form = UploadForm()
+    print(os.getcwd())
     if form.validate_on_submit():
         filename = secure_filename(form.photo.data.filename)
-        form.photo.data.save('pic/' + filename)
+        suffix = filename.split('.')[-1]
+        if suffix not in ['jpg','png','bmp']:
+            flash("不是图片哦")
+        date_as_filename = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")+'.'+suffix
+        form.photo.data.save('static/pic/' + date_as_filename)
+        rc = Picture(datetime.now(), date_as_filename, "static/pic/"+date_as_filename) 
+
+        db = MyDataBase.get_db()
+        # print(db)
+        try:
+            db.session.add(rc)
+            db.session.commit()
+        except Exception as e:
+            full_path = os.getcwd() + "static/pic/" + date_as_filename
+            if os.path.exists(full_path):
+                os.remove(full_path)
+            db.session.roll_back()
+            return "", 404
+
+
     else:
         filename = None
     # return render_template('upload.html', form=form, filename=filename)
@@ -171,7 +207,13 @@ def upload(type):
 
 def photos():
     form = UploadForm()
-    return render_template("photo.html", form=form), 200
+    page = request.args.get('page', 1, type=int)
+    rc = Picture.query.order_by(Picture.date.desc()).paginate(
+            page, 
+            per_page=15, 
+            error_out=False)
+    items = rc.items
+    return render_template("photo.html", form=form, paginate=rc, items=items), 200
 
 def register_all(register):
     register.add_route(index, '/', methods=['GET'])

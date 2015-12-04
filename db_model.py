@@ -35,3 +35,17 @@ class Diary(db.Model):
 
 	def __repr__(self):
 		return "{0.date} {0.tags}".format(self)
+
+class Picture(db.Model):
+	id = db.Column(db.Integer, primary_key=True)
+	date = db.Column(db.DateTime)
+	name = db.Column(db.String(256))
+	path = db.Column(db.String(1024))
+
+	def __init__(self, date, name, path):
+		self.date = date
+		self.name = name
+		self.path = path
+
+	def __repr__(self):
+		return "{0.name} {0.path}".format(self)
