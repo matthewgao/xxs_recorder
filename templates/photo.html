@@ -1,6 +1,7 @@
 
 {% extends "bootstrap/base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% import "_page_tool.html" as page_tool %}
 
 
 {% block head %}
@@ -15,6 +16,40 @@
 
 <script type="text/javascript">
 // document.getElementById('myform')
+
+  var g_id = null
+
+  $('#myModal').on('show.bs.modal', function (event) {
+    var img = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = img.data('whatever') // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    document.getElementById("show").src=recipient
+    g_id = img.data("id")
+  })
+
+  function del(){
+    xhr = new XMLHttpRequest();
+    if(xhr){
+      xhr.onreadystatechange = callback;
+      xhr.open("GET", "/delete/pic/"+g_id, true)
+      xhr.send(null)
+    }
+  }
+
+  function callback(){
+    if(xhr.readyState == 4){
+      if(xhr.status == 200){
+        var n = document.getElementById(g_id);
+        // alert(n)
+        if(n != null){
+          n.parentNode.removeChild(n);
+        }
+      }
+    }
+    //clost the Modal
+    $('#myModal').modal('hide')
+  }
 
 function uploadFile(){
     var xhr = new XMLHttpRequest();
@@ -42,11 +77,12 @@ function uploadFile(){
 
     xhr.upload.addEventListener("load", function(event){
         // alert("complete");
-        setTimeout(function(){
-            // $("#barparent").addClass('hidden');
-            $("#barparent").removeClass( "in");
-            $("#barparent").addClass( "out");
-        }, 3000);
+        // setTimeout(function(){
+        //     // $("#barparent").addClass('hidden');
+        //     $("#barparent").removeClass( "in");
+        //     $("#barparent").addClass( "out");
+        // }, 3000);
+        window.location="/photo"
 
     });
 
@@ -73,7 +109,12 @@ function uploadFile(){
 <div class="container-fluid" >
     <div class="row-fluid" id="row">
         <div class="col-lg-3 col-xs-12 col-sm-6">
-
+          {% for message in get_flashed_messages() %}
+          <div class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+          </div>
+          {% endfor %}
             <form id="myform" method="POST" action="/pic/upload" enctype="multipart/form-data">
                 <fieldset>
 
@@ -97,20 +138,61 @@ function uploadFile(){
             </div>
         </div>
         <div class="col-lg-9 visible-lg visible-sm">
-            <ul class="thumbnails">
-              <li class="span4">
-                <a href="#" class="thumbnail">
-                  <img data-src="holder.js/300x200" alt="">
-                </a>
-              </li>
-            <li class="span4">
-                <a href="#" class="thumbnail">
-                  <img data-src="holder.js/300x200" alt="">
-                </a>
-              </li>
-            </ul>
 
+            <table class="table table-hover" style="width:100%">
+            <thead>
+            {% set i=0 %}
+            {% for itr in items %}
+              {% if i % 5 == 0 %}
+              <tr>
+                <th id="{{ itr.id }}"><img  src="{{ itr.path }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/></th>
+              {% else %}
+                {% if i % 5 == 4 %}
+                    <th id="{{ itr.id }}"><img src="{{ itr.path }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/></th>
+                    </tr>
+                {% else %}
+                    <th id="{{ itr.id }}"><img src="{{ itr.path }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/></th>
+                {% endif %}
+              {% endif%}
+              {% set i = i +1 %}
+            {% endfor %}
+            {% if i % 5 != 0 %}
+                {% for n in ranges(i,5) %}
+                    <th>gf</th>
+                {% endfor %}
+                </tr>
+            {% endif %}
+            </thead>
+            </table>
+            {{page_tool.pagination_tool(paginate, 'main.index')}}
         </div>
     </div>
 </div>
-    {% endblock %}
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" 
+               data-dismiss="modal" aria-hidden="true">
+                  &times;
+            </button>
+         </div>
+         <div class="modal-body">
+            <img id="show" class="img-responsive img-thumbnail img-rounded" alt="name">
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default" 
+               data-dismiss="modal">关闭
+            </button>
+            <button type="button" class="btn btn-success" onclick="del()">
+               删除
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
+</div>
+
+{% endblock %}
