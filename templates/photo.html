@@ -31,24 +31,22 @@
   function del(){
     xhr = new XMLHttpRequest();
     if(xhr){
-      xhr.onreadystatechange = callback;
+      xhr.onreadystatechange = function (){
+            if(xhr.readyState == 4){
+              if(xhr.status == 200){
+                var n = document.getElementById(g_id);
+                // alert(n)
+                if(n != null){
+                  n.parentNode.removeChild(n);
+                }
+              }
+            }
+            $('#myModal').modal('hide')
+        };
+
       xhr.open("GET", "/delete/pic/"+g_id, true)
       xhr.send(null)
     }
-  }
-
-  function callback(){
-    if(xhr.readyState == 4){
-      if(xhr.status == 200){
-        var n = document.getElementById(g_id);
-        // alert(n)
-        if(n != null){
-          n.parentNode.removeChild(n);
-        }
-      }
-    }
-    //clost the Modal
-    $('#myModal').modal('hide')
   }
 
 function uploadFile(){
@@ -85,8 +83,6 @@ function uploadFile(){
         window.location="/photo"
 
     });
-
-    
 
     xhr.open("POST", "/pic/upload");
     xhr.send(formData);
@@ -140,29 +136,36 @@ function uploadFile(){
         <div class="col-lg-9 visible-lg visible-sm">
 
             <table class="table table-hover" style="width:100%">
-            <thead>
-            {% set i=0 %}
-            {% for itr in items %}
-              {% if i % 5 == 0 %}
-              <tr>
-                <th id="{{ itr.id }}"><img  src="{{ itr.path }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/></th>
-              {% else %}
-                {% if i % 5 == 4 %}
-                    <th id="{{ itr.id }}"><img src="{{ itr.path }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/></th>
-                    </tr>
-                {% else %}
-                    <th id="{{ itr.id }}"><img src="{{ itr.path }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/></th>
-                {% endif %}
-              {% endif%}
-              {% set i = i +1 %}
-            {% endfor %}
-            {% if i % 5 != 0 %}
-                {% for n in ranges(i,5) %}
-                    <th>gf</th>
+                <thead>
+                {% set i=0 %}
+                {% for itr in items %}
+                  {% if i % 5 == 0 %}
+                  <tr>
+                    <th id="{{ itr.id }}">
+                        <img  src="{{ itr.path }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/>
+                    </th>
+                  {% else %}
+                    {% if i % 5 == 4 %}
+                        <th id="{{ itr.id }}">
+                            <img src="{{ itr.path }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/>
+                        </th>
+                        </tr>
+                    {% else %}
+                        <th id="{{ itr.id }}">
+                            <img src="{{ itr.path }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/>
+                        </th>
+                    {% endif %}
+                  {% endif%}
+                  {% set i = i +1 %}
                 {% endfor %}
-                </tr>
-            {% endif %}
-            </thead>
+
+                {% if i % 5 != 0 %}
+                    {% for n in ranges(i,5) %}
+                        <th>gf</th>
+                    {% endfor %}
+                    </tr>
+                {% endif %}
+                </thead>
             </table>
             {{page_tool.pagination_tool(paginate, 'main.index')}}
         </div>

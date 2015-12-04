@@ -27,26 +27,23 @@
   function del(){
     xhr = new XMLHttpRequest();
     if(xhr){
-      xhr.onreadystatechange = callback;
+      xhr.onreadystatechange = function (){
+          if(xhr.readyState == 4){
+            if(xhr.status == 200){
+              var n = document.getElementById(g_id);
+              // alert(n)
+              if(n != null){
+                n.parentNode.removeChild(n);
+              }
+            }
+          }
+          //clost the Modal
+          $('#myModal').modal('hide')
+        };
       xhr.open("GET", "/delete/grow_record/"+g_id, true)
       xhr.send(null)
     }
   }
-
-  function callback(){
-    if(xhr.readyState == 4){
-      if(xhr.status == 200){
-        var n = document.getElementById(g_id);
-        // alert(n)
-        if(n != null){
-          n.parentNode.removeChild(n);
-        }
-      }
-    }
-    //clost the Modal
-    $('#myModal').modal('hide')
-  }
-
 
 var diameter = 1000,
     format = d3.format(",d"),
