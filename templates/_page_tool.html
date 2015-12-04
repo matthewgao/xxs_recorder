@@ -3,13 +3,13 @@
 <ul class="pagination pagination-centered pagination-sm pagination-lg">
     
         <li {% if not paginate.has_prev %} class="disabled" {% endif %}>
-            <a href="{{ url_for(endpoint, page=paginate.page-1)}}">上一页</a>
+            <a href="{{ url_for(endpoint, page=paginate.page-1, **kwargs)}}">上一页</a>
         </li>
     
     {% for itr in paginate.iter_pages(left_edge=2, left_current=2, right_current=4, right_edge=2) %}
         {% if itr %}
         <li {% if itr == paginate.page %} class="active" {% endif %}>
-            <a href="{{ url_for(endpoint, page=itr)}}">{{ itr }}</a>
+            <a href="{{ url_for(endpoint, page=itr, **kwargs)}}">{{ itr }}</a>
         </li>
         {% else %}
         <li>
@@ -21,7 +21,7 @@
 
 
         <li {% if not paginate.has_next %} class="disabled" {% endif %}>
-            <a href="{{ url_for(endpoint, page=paginate.page+1)}}">下一页</a>
+            <a href="{{ url_for(endpoint, page=paginate.page+1, **kwargs)}}">下一页</a>
         </li>
 
 

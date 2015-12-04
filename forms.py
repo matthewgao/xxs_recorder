@@ -21,3 +21,7 @@ class RecordForm(Form):
 class DiaryForm(Form):
 	text = TextField("给小小深写点什么吧")
 	tags = StringField('Tag', default='')
+
+
+class UploadForm(Form):
+    photo = FileField('上传图片')

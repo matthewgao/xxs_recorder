@@ -146,7 +146,9 @@ d3.select(self.frameElement).style("height", diameter + "px");
           </table>
          
       </div>
-       {{page_tool.pagination_tool(paginate, 'main.show')}}
+
+       {{ page_tool.pagination_tool(paginate, 'main.show', event=request.args.get('event', None)) }}
+
     </div>
     <div class="col-lg-7" id="visual-graph">
       
