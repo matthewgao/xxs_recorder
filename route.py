@@ -10,6 +10,7 @@ from db_model import GrowRecord, Diary, Picture
 from datetime import datetime, date, timedelta
 from sqlalchemy import func
 from werkzeug import secure_filename
+from PIL import Image
 import json
 import os
 
@@ -185,7 +186,13 @@ def upload(type):
             flash("不是图片哦")
         date_as_filename = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")+'.'+suffix
         form.photo.data.save('static/pic/' + date_as_filename)
-        rc = Picture(datetime.now(), date_as_filename, "static/pic/"+date_as_filename) 
+
+        with Image.open(form.photo.data) as pil_image:
+            pil_image.thumbnail((400,350))
+            pil_image.save("static/pic/thumbnail/" + date_as_filename, "JPEG")
+
+        rc = Picture(datetime.now(), date_as_filename, "static/pic/"+date_as_filename,
+            "static/pic/thumbnail/" + date_as_filename) 
 
         db = MyDataBase.get_db()
         # print(db)

@@ -142,17 +142,17 @@ function uploadFile(){
                   {% if i % 5 == 0 %}
                   <tr>
                     <th id="{{ itr.id }}">
-                        <img  src="{{ itr.path }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/>
+                        <img  src="{{ itr.thumbnail }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/>
                     </th>
                   {% else %}
                     {% if i % 5 == 4 %}
                         <th id="{{ itr.id }}">
-                            <img src="{{ itr.path }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/>
+                            <img src="{{ itr.thumbnail }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/>
                         </th>
                         </tr>
                     {% else %}
                         <th id="{{ itr.id }}">
-                            <img src="{{ itr.path }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/>
+                            <img src="{{ itr.thumbnail }}" class="img-responsive img-thumbnail img-rounded" alt="{{ itr.name }}" data-toggle="modal" data-target="#myModal" data-whatever="{{ itr.path }}" data-id="{{ itr.id }}"/>
                         </th>
                     {% endif %}
                   {% endif%}
@@ -167,7 +167,7 @@ function uploadFile(){
                 {% endif %}
                 </thead>
             </table>
-            {{page_tool.pagination_tool(paginate, 'main.index')}}
+            {{page_tool.pagination_tool(paginate, 'main.photos')}}
         </div>
     </div>
 </div>

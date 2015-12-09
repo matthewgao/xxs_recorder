@@ -41,11 +41,13 @@ class Picture(db.Model):
 	date = db.Column(db.DateTime)
 	name = db.Column(db.String(256))
 	path = db.Column(db.String(1024))
+	thumbnail = db.Column(db.String(1024))
 
-	def __init__(self, date, name, path):
+	def __init__(self, date, name, path, thumbnail):
 		self.date = date
 		self.name = name
 		self.path = path
+		self.thumbnail = thumbnail
 
 	def __repr__(self):
 		return "{0.name} {0.path}".format(self)
